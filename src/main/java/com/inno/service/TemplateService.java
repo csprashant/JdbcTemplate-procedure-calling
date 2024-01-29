@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 
+import com.inno.dto.Student;
+
 @Service
 public class TemplateService {
 	@Autowired	private JdbcTemplate jdbcTemplate;
@@ -22,4 +24,22 @@ public class TemplateService {
 		String name = out.get("ENAME").toString(); 
 		return name;
 	}
+	
+	public Student getStudentDetailsById(Integer id) {
+		SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+		SqlParameterSource in = new MapSqlParameterSource().addValue("EID", id);
+		Map<String, Object> out = simpleJdbcCall.withProcedureName("GET_DETAILS").execute(in);
+		System.out.println(out.isEmpty());
+		System.out.println(out);
+		Student student = new Student();
+		
+		student.setName(out.get("SNAME").toString()); 
+		student.setPercent(Double.parseDouble(out.get("SPER").toString()));
+		
+		return student;		
+				
+	}
+	
+	
+	
 }
