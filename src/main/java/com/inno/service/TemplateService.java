@@ -19,24 +19,23 @@ public class TemplateService {
 		SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
 		SqlParameterSource in = new MapSqlParameterSource().addValue("eid", id);
 		Map<String, Object> out = simpleJdbcCall.withProcedureName("getInfo").execute(in);
-		System.out.println(out.isEmpty());
-		System.out.println(out);
-		String name = out.get("ENAME").toString(); 
-		return name;
+		if(!out.isEmpty()) {
+			return out.get("ENAME").toString();
+		}
+		return null;
 	}
 	
 	public Student getStudentDetailsById(Integer id) {
 		SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
 		SqlParameterSource in = new MapSqlParameterSource().addValue("EID", id);
 		Map<String, Object> out = simpleJdbcCall.withProcedureName("GET_DETAILS").execute(in);
-		System.out.println(out.isEmpty());
-		System.out.println(out);
-		Student student = new Student();
-		
-		student.setName(out.get("SNAME").toString()); 
-		student.setPercent(Double.parseDouble(out.get("SPER").toString()));
-		
-		return student;		
+		if(!out.isEmpty()) {
+			Student student = new Student();
+			student.setName(out.get("SNAME").toString()); 
+			student.setPercent(Double.parseDouble(out.get("SPER").toString()));
+			return student;		
+		}
+		return null;
 				
 	}
 	
